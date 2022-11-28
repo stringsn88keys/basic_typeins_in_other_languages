@@ -18,8 +18,7 @@ func main() {
 	channelDepth := inputChannelDepth()
 	sampleSize := getSampleSize()
 	results := make(chan int) //, channelDepth)
-	//lock := make(chan bool)   //, channelDepth)
-	title()
+	// title()
 	fmt.Printf("%-10s %-10s %15s\n", "# HITS", "# THROWN", "PI")
 
 	for ch := 0; ch < channelDepth; ch++ {
