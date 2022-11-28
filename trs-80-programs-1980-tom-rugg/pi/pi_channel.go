@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/inancgumus/screen"
 )
@@ -23,18 +24,13 @@ func main() {
 
 	for ch := 0; ch < channelDepth; ch++ {
 		go func(ch int) {
+			rand := rand.New(rand.NewSource(time.Now().Unix()))
 			for {
-				//lock <- true
-				//fmt.Println(ch)
-				results <- countInsideHits(sampleSize)
+				results <- countInsideHits(sampleSize, rand)
 			}
 		}(ch)
 	}
 	for {
-		//_, ok := <-lock
-		//if !ok {
-		//	break
-		//}
 		numberOfHits, ok := <-results
 		if !ok {
 			break
@@ -65,9 +61,10 @@ func getSampleSize() int {
 	return sampleSize
 }
 
-func countInsideHits(sampleSize int) int {
+func countInsideHits(sampleSize int, rand *rand.Rand) int {
 	numberOfHits := 0
 	for j := 0; j < sampleSize; j++ {
+		// https://akbir.dev/post/golangs-rand-and-concurrency/
 		x := rand.Float64()
 		y := rand.Float64()
 		if (x*x + y*y) < 1.0 {
